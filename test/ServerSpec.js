@@ -11,6 +11,8 @@ var Link = require('../app/models/link');
 // NOTE: these tests are designed for mongo!
 /////////////////////////////////////////////////////
 
+//GUESS WHAT DOGS RULE
+
 describe('', function() {
 
   beforeEach(function(done) {
