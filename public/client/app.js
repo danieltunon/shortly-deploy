@@ -1,5 +1,5 @@
-window.Shortly = Backbone.View.extend({
-  template: Templates.layout,
+var Shortly = Backbone.View.extend({
+  template: window.Templates.layout,
 
   events: {
     'click li a.index': 'renderIndexView',

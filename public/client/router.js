@@ -22,3 +22,4 @@ Shortly.Router = Backbone.Router.extend({
     this.swapView(new Shortly.createLinkView());
   }
 });
+var poo = 'smelly';

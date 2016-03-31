@@ -3,6 +3,24 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        separator: ';'
+      },
+      libs: {
+        src: [
+          'public/lib/jquery.js', 
+          'public/lib/underscore.js',
+          'public/lib/handlebars.js',
+          'public/lib/backbone.js'
+        ],
+        dest: 'public/prod/libs-concated.js'
+      },
+      dist: {
+        src: [
+          'public/client/*.js'
+        ],
+        dest: 'public/prod/client-concated.js'
+      }
     },
 
     mochaTest: {
@@ -21,11 +39,27 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        mangle: {
+          except: ['$', 'Handlebars', 'Shortly', 'jQuery', 'Templates', 'Backbone']
+        }
+      },
+      lib: {
+        files: {
+          'public/prod/libs-min.js': ['public/prod/libs-concated.js'] //'<%= concat.dist.dest =%>'
+        }
+      },
+      client: {
+        files: {
+          'public/prod/client-min.js': ['public/prod/client-concated.js'] //'<%= concat.dist.dest =%>'
+        }
+      }
     },
 
     eslint: {
       target: [
-        // Add list of files to lint here
+        '*.js',
+        '/public/client/*.js'
       ]
     },
 
@@ -51,6 +85,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+
       }
     },
   });
@@ -66,6 +101,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('server-dev', function (target) {
     // Running nodejs in a different process and displaying output on the main console
+
     var nodemon = grunt.util.spawn({
       cmd: 'grunt',
       grunt: true,
@@ -78,12 +114,6 @@ module.exports = function(grunt) {
   });
 
 
-  grunt.registerTask('upload', function(n) {
-    if (grunt.option('prod')) {
-      // add your production server task here
-    }
-    grunt.task.run([ 'server-dev' ]);
-  });
 
   ////////////////////////////////////////////////////
   // Main grunt tasks
@@ -94,13 +124,22 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'test',
+    'eslint',
+    'concat',
+    'uglify',
   ]);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
     } else {
-      grunt.task.run([ 'server-dev' ]);
+      grunt.task.run(['test',
+      'eslint',
+      'concat',
+      'uglify',
+      'server-dev'
+       ]);
     }
   });
 
