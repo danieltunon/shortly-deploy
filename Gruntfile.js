@@ -85,7 +85,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
-
+        command: ' MODE=production node server.js'
       }
     },
   });
@@ -132,14 +132,21 @@ module.exports = function(grunt) {
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
-      // add your production server task here
+      grunt.task.run([
+        'test',
+        'eslint',
+        'concat',
+        'uglify',
+        'shell:prodServer'
+      ]);
     } else {
-      grunt.task.run(['test',
-      'eslint',
-      'concat',
-      'uglify',
-      'server-dev'
-       ]);
+      grunt.task.run([
+        'test',
+        'eslint',
+        'concat',
+        'uglify',
+        'server-dev'
+      ]);
     }
   });
 
